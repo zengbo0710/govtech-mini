@@ -1,0 +1,164 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: CDS User
+  license:
+    name: CDS
+servers:
+  - url: http://localhost:8080/v1
+paths:
+  /users:
+    get:
+      summary: List users with a valid salary between 0 and 4000
+      operationId: listUsers
+      tags:
+        - User
+      parameters:
+        - in: query
+          name: sortName
+          schema:
+            type: string
+            default: "name"
+        - in: query
+          name: sortDir
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+            default: ASC
+      responses:
+        '200':
+          description: An array of users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create an user
+      operationId: createUser
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        '201':
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Update an user
+      operationId: updateUser
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        '201':
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/{userId}:
+    get:
+      summary: Info for a specific user
+      operationId: getUser
+      tags:
+        - User
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The userId of the user to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete a specific user
+      operationId: deleteUser
+      tags:
+        - User
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The userId of the user to delete
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - userId
+        - name
+        - salary
+      properties:
+        userId:
+          type: string
+        name:
+          type: string
+        salary:
+          type: number
+          format: double
+    UserResponse:
+      type: object
+      required:
+        - results
+      properties:
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
