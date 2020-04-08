@@ -1,13 +1,18 @@
 package com.cds.mini.service;
 
 import com.cds.mini.Constants;
+import com.cds.mini.entity.Account;
 import com.cds.mini.entity.User;
 import com.cds.mini.error.Errors;
 import com.cds.mini.error.ServiceException;
+import com.cds.mini.repository.AccountRepository;
 import com.cds.mini.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.validator.SpringValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +22,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @Slf4j
@@ -141,5 +147,27 @@ public class UserService {
 
     private User getExistingUser(String userId) {
         return userRepository.findByUserId(userId).orElse(null);
+    }
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Transactional
+    public void createAccounts() {
+        User user = userRepository.findByUserId("0001").orElse(null);
+        if (user != null) {
+            IntStream.rangeClosed(1, 10).mapToObj(index -> {
+                Account account = new Account();
+                account.setUser(user);
+                account.setAccountNumber("00000" + index);
+
+                return account;
+            }).forEach(account -> accountRepository.save(account));
+        }
+    }
+    @Transactional
+    public void listAccounts() {
+        userRepository.findByUserId("0001")
+                .ifPresent(user -> user.getAccounts().forEach(account -> System.out.println(account.getAccountNumber())));
     }
 }

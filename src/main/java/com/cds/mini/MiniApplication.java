@@ -4,12 +4,14 @@ import com.cds.mini.entity.Account;
 import com.cds.mini.entity.User;
 import com.cds.mini.repository.AccountRepository;
 import com.cds.mini.repository.UserRepository;
+import com.cds.mini.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import javax.transaction.Transactional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -26,21 +28,29 @@ public class MiniApplication {
 	@Autowired
 	private AccountRepository accountRepository;
 
+	@Autowired
+	private UserService userService;
+
 	@Bean
 	public CommandLineRunner commandLineRunner() {
 		return (args) -> {
-			User user = userRepository.findByUserId("0001").orElse(null);
-			if (user != null) {
-				IntStream.rangeClosed(1, 10).mapToObj(index -> {
-					Account account = new Account();
-					account.setUser(user);
-					account.setAccountNumber("00000" + index);
-
-					return account;
-				}).forEach(account -> accountRepository.save(account));
-			}
-
-			accountRepository.findAll().forEach(account -> System.out.println(account.getAccountNumber()));
+//			User user = userRepository.findByUserId("0001").orElse(null);
+//			if (user != null) {
+//				IntStream.rangeClosed(1, 10).mapToObj(index -> {
+//					Account account = new Account();
+//					account.setUser(user);
+//					account.setAccountNumber("00000" + index);
+//
+//					return account;
+//				}).forEach(account -> accountRepository.save(account));
+//			}
+//
+////			accountRepository.findAll().forEach(account -> System.out.println(account.getAccountNumber()));
+//
+//			User user1 = userRepository.findByUserId("0001").orElse(null);
+//			user1.getAccounts().forEach(account -> System.out.println(account.getAccountNumber()));
+			userService.createAccounts();
+			userService.listAccounts();
 		};
 	}
 }

@@ -43,7 +43,7 @@ public class User {
     @Column(name = "UpdatedBy", nullable = false)
     private int updatedBy;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Account> accounts = new ArrayList<>();
 
 }
