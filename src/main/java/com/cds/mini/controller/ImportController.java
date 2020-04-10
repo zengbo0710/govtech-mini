@@ -26,9 +26,10 @@ public class ImportController {
 
     @GetMapping
     public BatchStatus importUsers() throws Exception {
-        JobParameters jobParameters = new JobParameters();
-        JobExecution jobExecution = jobLauncher.run(importCSVJob, jobParameters);
-
+//        JobParametersBuilder builder = new JobParametersBuilder()
+//                .addString("usersFile", "users.csv");
+//        JobExecution jobExecution = jobLauncher.run(importCSVJob, builder.toJobParameters());
+        JobExecution jobExecution = jobLauncher.run(importCSVJob, new JobParameters());
         log.info("Start the import-csv-job");
         while (jobExecution.isRunning()) {
             System.out.println("in progress");

@@ -20,6 +20,6 @@ public class UserItemReaderListener implements ItemReadListener<User> {
 
     @Override
     public void onReadError(Exception ex) {
-        log.info("Error in reading", ex);
+        log.error("Error in reading: {}", ex.getMessage());
     }
 }
