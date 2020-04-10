@@ -5,7 +5,6 @@ import com.cds.mini.batch.listeners.UserItemWriteListener;
 import com.cds.mini.entity.User;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
@@ -22,7 +21,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 
 import javax.sql.DataSource;
@@ -31,9 +29,9 @@ import javax.sql.DataSource;
  * The configuration to import the csv data into the database.
  * The {@link UserFieldSetMapper} is used to parse and validate the csv data before inserting the database.
  */
-@Configuration
+//@Configuration
 @ConditionalOnProperty("user.batch.enabled")
-@EnableBatchProcessing
+//@EnableBatchProcessing
 public class BatchConfig {
 
     public static final String USER_ID_FIELD = "userId";
@@ -64,7 +62,7 @@ public class BatchConfig {
         this.chunkSize = chunkSize;
     }
 
-    @Bean
+    @Bean(name = "csvJob")
     public Job readCSVFileJob() {
         return jobBuilderFactory
                 .get("readUserCSVFileJob")
