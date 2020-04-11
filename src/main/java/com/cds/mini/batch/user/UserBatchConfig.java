@@ -7,6 +7,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.step.skip.SkipPolicy;
 import org.springframework.batch.item.ItemProcessor;
@@ -20,7 +21,9 @@ import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.util.StringUtils;
 
 @Configuration
 @EnableBatchProcessing
@@ -52,15 +55,22 @@ public class UserBatchConfig {
                 .build();
     }
 
-    //    @StepScope
+    @StepScope
     @Bean
-    public ItemReader<User> itemReader(@Value("${user.batch.csv}") Resource resource) {
+    public FlatFileItemReader<User> itemReader(@Value("${user.batch.csv}") Resource resource,
+                                               @Value("#{jobParameters[data]}") String csvData) {
+        System.out.println(csvData);
 //    public FlatFileItemReader<User> itemReader(@Value("#{jobParameters[usersFile]}") String usersFile) {
         FlatFileItemReader<User> itemReader = new FlatFileItemReader<>();
 
         itemReader.setLinesToSkip(1);
 //        ClassPathResource resource = new ClassPathResource(usersFile);
-        itemReader.setResource(resource);
+        if (StringUtils.isEmpty(csvData)) {
+            itemReader.setResource(resource);
+        } else {
+            itemReader.setResource(new ByteArrayResource(csvData.getBytes()));
+        }
+
         itemReader.setLineMapper(lineMapper());
 
         return itemReader;
