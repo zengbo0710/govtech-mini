@@ -62,4 +62,9 @@ public class ImportController {
 
         return jobExecution.getStatus();
     }
+
+    @GetMapping("/base64-security")
+    public BatchStatus importUsersFromBase64Security(@RequestParam(name = "data") String base64Data) throws Exception {
+        return importUsersFromBase64(base64Data);
+    }
 }
