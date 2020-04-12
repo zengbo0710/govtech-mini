@@ -29,8 +29,8 @@ public class JwtTokenFilter extends AbstractAuthenticationProcessingFilter {
 
         String token = authorization;
 
-        JwtToken jwtToken = new JwtToken(token);
-        return getAuthenticationManager().authenticate(jwtToken);
+        JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(token);
+        return getAuthenticationManager().authenticate(jwtAuthenticationToken);
     }
 
     @Override

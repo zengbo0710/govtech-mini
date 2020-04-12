@@ -35,7 +35,6 @@ public class JwtUtils {
         user.setRoles(Arrays.asList("ADMIN", "PM"));
 
         String token = generate(user);
-//        token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQZXRlciIsInVzZXJJZCI6IjEiLCJyb2xlIjoiQURNSU4ifQ.3qaLGBEBxbrVSmQHn6sx9yRGtLOaraoVZCNv9ph7MXfd4LG66BSAss2tZE_RByhEXvugVJi25VdYxZoP5KK64g";
         Claims claims = decode(token);
         System.out.println(claims);
     }

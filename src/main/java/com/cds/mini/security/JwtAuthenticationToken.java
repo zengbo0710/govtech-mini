@@ -2,10 +2,10 @@ package com.cds.mini.security;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-public class JwtToken extends UsernamePasswordAuthenticationToken {
+public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken {
     private String token;
 
-    public JwtToken(String token) {
+    public JwtAuthenticationToken(String token) {
         super(null, null);
         this.token = token;
     }

@@ -18,8 +18,8 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
 
     @Override
     protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
-        JwtToken token = (JwtToken) authentication;
-        Claims claims = JwtUtils.decode(token.getToken());
+        JwtAuthenticationToken authenticationToken = (JwtAuthenticationToken) authentication;
+        Claims claims = JwtUtils.decode(authenticationToken.getToken());
         List<String> roles = (List<String>) claims.get("roles");
         String userName = claims.getSubject();
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(roles.toArray(new String[0]));

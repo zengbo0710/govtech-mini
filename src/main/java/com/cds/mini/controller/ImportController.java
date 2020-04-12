@@ -33,10 +33,9 @@ public class ImportController {
         JobParametersBuilder builder = new JobParametersBuilder()
                 .addString("timestamp", LocalDateTime.now().toString());
         JobExecution jobExecution = jobLauncher.run(importCSVJob, builder.toJobParameters());
-//        JobExecution jobExecution = jobLauncher.run(importCSVJob, new JobParameters());
         log.info("Start the import-csv-job");
         while (jobExecution.isRunning()) {
-            System.out.println("in progress");
+            log.info("job in progress");
         }
 
         log.info("Job is done");
@@ -55,7 +54,7 @@ public class ImportController {
         JobExecution jobExecution = jobLauncher.run(importCSVJob, builder.toJobParameters());
         log.info("Start the import-csv-job");
         while (jobExecution.isRunning()) {
-            System.out.println("in progress");
+            log.info("job in progress");
         }
 
         log.info("Job is done");
